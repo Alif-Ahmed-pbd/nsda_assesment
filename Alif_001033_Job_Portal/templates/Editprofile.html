@@ -1,0 +1,174 @@
+{% extends "dashboard.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome for icons -->
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .update-profile-container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
+    .update-profile-header {
+        text-align: center;
+        padding: 20px;
+        background-color: #3498db;
+        color: #fff;
+    }
+    
+    .form-group {
+        padding: 20px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: bold;
+    }
+    
+    input,
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    
+    .update-profile-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #2ecc71;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    .update-profile-button:hover {
+        background-color: #27ae60;
+    }
+
+    .file-input-wrapper {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+    }
+
+    .file-input-wrapper input[type=file] {
+        font-size: 100px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+    }
+
+    .file-input-wrapper .file-input-label {
+        display: block;
+        padding: 10px 15px;
+        background-color: #3498db;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .file-input-wrapper .file-input-label:hover {
+        background-color: #2980b9;
+    }
+
+</style>
+<body>
+
+<div class="update-profile-container">
+    <div class="update-profile-header">
+        <h1>Update Profile</h1>
+    </div>
+    <form action="{% url 'EditProfilePage' %}" method="POST" enctype="multipart/form-data" class="form-group">
+        {% csrf_token %}
+        <label for="user_id">UserID:</label>
+        <input type="text" id="user_id" name="UserID" value="{{ request.user.id }}" required readonly>
+    
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" value="{{ request.user.first_name }}" required>
+    
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" value="{{ request.user.last_name }}" required>
+    
+        <label for="display_name">Display Name:</label>
+        <input type="text" id="display_name" name="display_name" value="{{ request.user.display_name }}" required>
+    
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="{{ request.user.username }}" required readonly>
+    
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ request.user.email }}" required readonly>
+    
+        <label for="profile_picture">Profile Picture:</label>
+        <div class="file-input-wrapper">
+            <span class="file-input-label">Choose File</span>
+            <input type="file" id="profile_picture" name="image">
+        </div>
+        
+        {% if user.user_type == 'jobseeker' %}
+
+        <label for="skills">Skills:</label>
+        <input type="text" id="skills" name="skills" value="{{ request.user.jobseekerprofile.skills }}">
+    
+        <label for="resume">Resume:</label>
+        <div class="file-input-wrapper">
+            <span class="file-input-label">Choose File</span>
+            <input type="file" id="resume" name="resume">
+        </div>
+            
+        {% endif %}
+
+        <label >About:</label>
+        <textarea name="about" cols="30" rows="10">{{user.about}}</textarea>
+
+        {% if user.user_type == 'recruiter' %}
+    
+    
+        <label for="companyname">Company Name:</label>
+        <input type="companyname" id="companyname" name="companyname" value="{{ request.user.companyname }}" >
+
+    
+        <label for="post">Post :</label>
+        <input type="post" id="post" name="post" value="{{ request.user.post }}" >
+
+        {% endif %}
+    
+        {% if user.user_type == 'jobseeker' %}
+
+        <label for="skills">Skills:</label>
+        <input type="skills" id="skills" name="skills" value="{{ request.user.skills }}" >
+        {% endif %}
+    
+        <input type="submit" value="Update Profile" class="update-profile-button">
+    </form>
+    
+</div>
+
+</body>
+</html>
+{% endblock content %}

@@ -1,0 +1,44 @@
+{% extends "dashboard.html" %}
+
+{% block content %}
+<section class="job-listings"> 
+    <h2>All Job </h2>
+    <ul class="job-list">
+        {% for job_item in job %}
+        <li class="job-item">
+            <div class="job-details">
+                <h3>Job Title: {{ job_item.job_title }}</h3>
+                <p class="company">Number Of Openings: {{ job_item.number_of_openings }}</p>
+                <p class="description">Description: {{ job_item.description }}</p>
+                <p class="created-by">Created By: {{ job_item.job_creator }}</p>
+                <p class="created-time">Created Time: {{ job_item.create_at }}</p>
+                <p class="created-time">Category: {{ job_item.categories }}</p>
+                <p class="created-time">Skills Need: {{ job_item.skills }}</p>
+                {% if job_item.update_at %}
+                    {% if job_item.create_at != job_item.update_at %}
+                        <p class="update-time">Update Time: {{ job_item.update_at }}</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% if user.user_type == 'jobseeker' %}
+                <div class="job-actions">
+                    <p class="already-applied">Already Applied: {{ Already_applied_job }}</p>
+                    {% if not Already_applied_job %}
+                        <a href="{% url 'applyPage' job_item.id %}" class="apply-button">Apply Now</a>
+                    {% else %}
+                        <button disabled class="applied-button">Applied</button>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if user.user_type == 'recruiter' and user.id == job_item.job_creator.id %}
+                <div class="job-actions">
+                    <a href="{% url "editPage" job_item.id %}" class="edit-link">Edit</a>
+                    <a href="{% url "deletePage" job_item.id %}" class="delete-link">Delete</a>
+                </div>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</section> 
+
+{% endblock content %}

@@ -1,0 +1,27 @@
+{% block content %}
+<nav>
+    {% comment %} Common menu for both recruiter and job seeker {% endcomment %}
+    <a href="#">Home</a>
+    <a href="{% url "viewjobPage" %}">View Job</a>
+    <a style="float:right" href="{% url "logoutPage" %}">Logout</a>
+    <a style="float:right" href="{% url "ProfilePage" %}">Profile</a>
+    <a href="{% url 'matching_jobs' %}">Dashboard</a>
+
+
+
+    <!-- {% comment %} Additional menu for recruiter to add jobs {% endcomment %} -->
+    {% if user.user_type == 'recruiter' %}
+        <a href="{% url "add_job_Page" %}">Add Job</a>
+    {% endif %}
+
+    <!-- {% comment %} Search form for job seekers {% endcomment %} -->
+        {% if user.user_type == 'jobseeker' %}
+    <a style="float:right">
+    <form method="GET" action="{% url 'searchResultsPage' %}" class="search-form">
+        <input type="text" name="search_query" placeholder="Search Jobs">
+        <button type="submit">Search</button>
+    </form>
+</a>
+{% endif %}
+</nav>
+{% endblock content %}
